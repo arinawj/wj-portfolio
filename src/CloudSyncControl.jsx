@@ -8,7 +8,7 @@ export default function CloudSyncControl() {
 
   useEffect(() => subscribeToCloudUser((nextUser) => {
     setUser(nextUser);
-    document.documentElement.classList.toggle("wj-admin-mode", adminRequested || Boolean(nextUser));
+    document.documentElement.classList.toggle("wj-admin-mode", Boolean(nextUser));
   }), [adminRequested]);
 
   const run = async (action, success) => {

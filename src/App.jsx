@@ -162,10 +162,12 @@ function MainPage({ onRouteNavigate, onSectionNavigate }) {
   }, []);
 
   useEffect(() => {
-    const storageKey = language === "en" ? "wj-main-copy-en-v1" : "wj-main-copy-v1";
+    const koreanStorageKey = "wj-main-copy-v1";
+    const storageKey = language === "en" ? "wj-main-copy-en-v2" : koreanStorageKey;
     const categoryRepairKey = "wj-operate-category-repair-v1";
-    const shouldRepairOperateCategories = !window.localStorage.getItem(categoryRepairKey);
+    const shouldRepairOperateCategories = language === "ko" && !window.localStorage.getItem(categoryRepairKey);
     const savedCopy = JSON.parse(window.localStorage.getItem(storageKey) || "{}");
+    const koreanCopy = JSON.parse(window.localStorage.getItem(koreanStorageKey) || "{}");
     const selector = [
       ".brand strong",
       ".brand span",
@@ -223,22 +225,25 @@ function MainPage({ onRouteNavigate, onSectionNavigate }) {
       const legacyKey = `${section}:${element.tagName.toLowerCase()}:${index}`;
       const key = getStableCopyKey(element);
       const previousKey = getPreviousCopyKey(element);
-      const defaultText = element.dataset.koreanCopy || element.innerText;
-      element.dataset.koreanCopy = defaultText;
+      const sourceText = element.dataset.koreanCopy || element.innerText;
       element.dataset.mainCopyKey = key;
       element.classList.add("main-copy-content");
       if (!Object.prototype.hasOwnProperty.call(savedCopy, key)) {
         const isNestedHeaderCopy = Boolean(element.closest("header") && !element.closest(".site-shell > header"));
-        const savedValue = isNestedHeaderCopy
-          ? defaultText
-          : (savedCopy[previousKey] ?? savedCopy[legacyKey]);
-        const languageDefault = language === "en" ? translatePortfolioText(defaultText) : defaultText;
+        const koreanValue = isNestedHeaderCopy
+          ? sourceText
+          : (koreanCopy[key] ?? koreanCopy[previousKey] ?? koreanCopy[legacyKey] ?? sourceText);
+        const savedValue = language === "en"
+          ? undefined
+          : (isNestedHeaderCopy ? sourceText : (savedCopy[previousKey] ?? savedCopy[legacyKey]));
+        const languageDefault = language === "en" ? translatePortfolioText(koreanValue) : sourceText;
         savedCopy[key] = savedValue === "" && element.matches("#operate .section-copy")
           ? languageDefault
           : (savedValue ?? languageDefault);
         window.localStorage.setItem(storageKey, JSON.stringify(savedCopy));
       }
       element.textContent = savedCopy[key];
+      if (language === "ko") element.dataset.koreanCopy = savedCopy[key];
       if (shouldRepairOperateCategories && element.matches("#operate .case-heading p")) {
         const categoryIndex = [...document.querySelectorAll("#operate .case-heading p")].indexOf(element);
         const category = operateCases[categoryIndex]?.category;

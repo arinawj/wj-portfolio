@@ -29,7 +29,7 @@ function getCopyKey(element) {
 
 export default function DetailTextEditor({ storageKey }) {
   const { language } = useLanguage();
-  const languageStorageKey = language === "en" ? `${storageKey}-en` : storageKey;
+  const languageStorageKey = language === "en" ? `${storageKey}-en-v2` : storageKey;
   const [isEditing, setIsEditing] = useState(
     () => new URLSearchParams(window.location.search).get("copy") === "1",
   );
@@ -40,6 +40,12 @@ export default function DetailTextEditor({ storageKey }) {
       savedCopy = JSON.parse(window.localStorage.getItem(languageStorageKey) || "{}");
     } catch {
       savedCopy = {};
+    }
+    let koreanCopy = {};
+    try {
+      koreanCopy = JSON.parse(window.localStorage.getItem(storageKey) || "{}");
+    } catch {
+      koreanCopy = {};
     }
 
     const elements = [...document.querySelectorAll(editableSelector)].filter((element) =>
@@ -52,11 +58,12 @@ export default function DetailTextEditor({ storageKey }) {
     const cleanups = elements.map((element) => {
       const key = getCopyKey(element);
       element.classList.add("detail-copy-content");
-      const koreanText = element.dataset.koreanCopy || element.innerText;
-      element.dataset.koreanCopy = koreanText;
+      const sourceText = element.dataset.koreanCopy || element.innerText;
+      const koreanText = koreanCopy[key] ?? sourceText;
       if (Object.prototype.hasOwnProperty.call(savedCopy, key)) element.textContent = savedCopy[key];
       else if (language === "en") element.textContent = translatePortfolioText(koreanText);
       else element.textContent = koreanText;
+      if (language === "ko") element.dataset.koreanCopy = element.innerText;
       if (!isEditing) return () => {};
 
       element.contentEditable = "true";

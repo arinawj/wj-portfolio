@@ -162,6 +162,7 @@ export function PageTranslator() {
       applying = true;
       const elements = root.querySelectorAll?.("*:not(script):not(style):not(input):not(textarea)") ?? [];
       elements.forEach((element) => {
+      if (element.closest(".main-copy-content, .detail-copy-content")) return;
       element.childNodes.forEach((node) => {
         if (node.nodeType !== Node.TEXT_NODE || !node.nodeValue.trim()) return;
         if (!node.__portfolioKorean) node.__portfolioKorean = node.nodeValue;

@@ -4,8 +4,12 @@ import { signInAsEditor, signOutEditor, subscribeToCloudUser, uploadCurrentLocal
 export default function CloudSyncControl() {
   const [user, setUser] = useState(null);
   const [status, setStatus] = useState("");
+  const adminRequested = ["admin", "edit", "copy"].some((key) => new URLSearchParams(window.location.search).has(key));
 
-  useEffect(() => subscribeToCloudUser(setUser), []);
+  useEffect(() => subscribeToCloudUser((nextUser) => {
+    setUser(nextUser);
+    document.documentElement.classList.toggle("wj-admin-mode", adminRequested || Boolean(nextUser));
+  }), [adminRequested]);
 
   const run = async (action, success) => {
     setStatus("처리 중...");
@@ -16,6 +20,8 @@ export default function CloudSyncControl() {
       setStatus(error.message || "처리하지 못했습니다.");
     }
   };
+
+  if (!adminRequested && !user) return null;
 
   return (
     <aside className="cloud-sync-control" aria-label="온라인 편집 동기화">
@@ -32,4 +38,3 @@ export default function CloudSyncControl() {
     </aside>
   );
 }
-

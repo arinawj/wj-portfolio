@@ -1,0 +1,27 @@
+node_modules/
+dist/
+.vercel/
+.firebase/
+.env
+.env.*
+!.env.example
+firebase-debug.log*
+npm-debug.log*
+
+qa-*/
+design-snapshots/
+source-assets/
+laptop assets/
+최종-에셋/
+
+*.docx
+*.pdf
+*.pdf.jpg
+main-*.png
+시안*.png
+참고.png
+메인페이지 시안.png
+경영관리-상세*.png
+cS관리-상세.png
+wj-v2-*.jpg
+hero-glass-ribbon-final.png

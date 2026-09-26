@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PARK WOOJUNG">
+  <rect width="64" height="64" rx="14" fill="#f8fbff"/>
+  <path d="M15 17h6l5 21 5-21h5l5 21 5-21h5l-8 30h-5l-5-20-5 20h-5L15 17Z" fill="#05070d"/>
+  <circle cx="50" cy="48" r="5" fill="#7256ff"/>
+  <circle cx="55" cy="15" r="3" fill="#ffd32f"/>
+</svg>

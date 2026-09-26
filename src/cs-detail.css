@@ -1,0 +1,161 @@
+.cs-detail {
+  --md-purple: #11bda8;
+  --md-dark: #071318;
+  background: #071318;
+}
+
+.cs-detail main {
+  background-color: #071318;
+}
+
+.cs-detail .management-hero {
+  min-height: 465px;
+  background-image: linear-gradient(rgba(3, 12, 17, 0.08), rgba(3, 12, 17, 0.08)), var(--section-backgrounds);
+  background-position: center top;
+  background-size: 100% 629px;
+}
+
+.cs-detail .management-hero-grid {
+  min-height: 465px;
+}
+
+.cs-detail .management-hero h1 span {
+  background: #14c8ae;
+  box-shadow: 0 0 22px rgba(20, 200, 174, 0.68);
+}
+
+.cs-detail .management-product-visual img {
+  width: 900px;
+  margin: 0 -15px -26px auto;
+  transform: none;
+}
+
+.cs-detail .management-features {
+  background-image: linear-gradient(rgba(4, 17, 22, 0.1), rgba(4, 17, 22, 0.1)), var(--section-backgrounds);
+  background-position: center bottom;
+  background-size: 100% 629px;
+}
+
+.cs-detail .preview-tabs button i,
+.cs-detail .screen-callout b,
+.cs-detail .screen-callout-dot,
+.cs-detail .callout-target-handle,
+.cs-detail .callout-bend-handle,
+.cs-detail .outcome-card.is-accent li span {
+  background: #11bda8;
+}
+
+.cs-detail .preview-tabs button.is-active,
+.cs-detail .screen-callout {
+  color: #079e8b;
+}
+
+.cs-detail .preview-tabs button.is-active {
+  border-left-color: #11bda8;
+}
+
+.cs-detail .screen-callout-line path {
+  stroke: #11bda8;
+}
+
+.cs-detail .management-preview {
+  background-color: #eefbfc;
+  background-image: var(--screen-preview-background);
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+.cs-detail .preview-layout {
+  box-sizing: border-box;
+  min-height: 499px;
+  height: 499px;
+}
+
+.cs-detail .preview-tabs {
+  margin-top: 12px;
+}
+
+.cs-detail .preview-tabs button {
+  min-height: 30px;
+}
+
+.cs-detail .preview-capture {
+  top: 15.8%;
+  left: 9.6%;
+  width: 80.8%;
+  height: 65.6%;
+  border-radius: 8px;
+}
+
+.cs-detail .preview-frame-art {
+  transform: scaleX(.93);
+}
+
+.cs-detail .outcome-card.is-accent {
+  border-color: rgba(17, 189, 168, 0.55);
+  background: linear-gradient(135deg, rgba(9, 112, 105, 0.62), rgba(4, 45, 55, 0.88));
+}
+
+.cs-detail .management-outcomes {
+  background-color: #071318;
+  background-image: var(--outcomes-background);
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+.cs-detail .outcome-grid {
+  min-height: 213px;
+}
+
+.cs-detail .management-role {
+  background-color: #071318;
+  background-image: var(--role-background);
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+.cs-detail .role-grid {
+  min-height: 151px;
+}
+
+.cs-detail .management-next {
+  background-color: #071318;
+  background-image: var(--next-project-background);
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+.cs-detail .next-grid {
+  min-height: 174px;
+}
+
+.cs-detail .next-grid > a:hover,
+.cs-detail .next-grid > a:focus-visible {
+  border-color: rgba(113, 71, 255, 0.72);
+  box-shadow: 0 0 28px rgba(113, 71, 255, 0.24);
+}
+
+.cs-detail .next-grid > a:hover img,
+.cs-detail .next-grid > a:focus-visible img {
+  filter: brightness(1.08) drop-shadow(0 0 14px rgba(113, 71, 255, 0.42));
+}
+
+.cs-detail .next-grid > a:hover span,
+.cs-detail .next-grid > a:focus-visible span {
+  border-color: #8f72ff;
+  color: #fff;
+  background: rgba(113, 71, 255, 0.42);
+}
+
+.cs-detail .preview-editor-callout-tabs button.is-active,
+.cs-detail .preview-editor-line-controls button.is-active,
+.cs-detail .preview-editor-line-controls .preview-editor-dashed.is-active span,
+.cs-detail .preview-editor-actions button.is-primary {
+  border-color: #12bba7;
+  background: #0a9e8d;
+}
+
+.cs-detail .preview-editor-line-controls .preview-editor-dashed.is-active {
+  border-color: #12bba7;
+  background: rgba(10, 158, 141, 0.24);
+}

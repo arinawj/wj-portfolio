@@ -11,7 +11,10 @@ const firebaseConfig = {
   appId: "1:750717642832:web:d9050f4f9c7a4f05a9c955",
 };
 
-const ADMIN_EMAIL = "arinawj@gmail.com";
+const ADMIN_EMAILS = new Set([
+  "arinawj@gmail.com",
+  "rorirorirorari@gmail.com",
+]);
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -31,7 +34,7 @@ function isPortfolioKey(key) {
 }
 
 async function saveEntry(key, value) {
-  if (currentUser?.email !== ADMIN_EMAIL || !isPortfolioKey(key)) return;
+  if (!ADMIN_EMAILS.has(currentUser?.email) || !isPortfolioKey(key)) return;
   const entryId = encodeURIComponent(key);
   const entryRef = doc(entriesRef, entryId);
   const chunksRef = collection(entryRef, "chunks");
@@ -67,7 +70,7 @@ export async function initializeCloudStorage() {
   }
 
   onAuthStateChanged(auth, (user) => {
-    currentUser = user?.email === ADMIN_EMAIL ? user : null;
+    currentUser = ADMIN_EMAILS.has(user?.email) ? user : null;
     notify();
   });
 }
@@ -87,7 +90,7 @@ export function signOutEditor() {
 }
 
 export async function uploadCurrentLocalContent() {
-  if (currentUser?.email !== ADMIN_EMAIL) throw new Error("관리자 로그인이 필요합니다.");
+  if (!ADMIN_EMAILS.has(currentUser?.email)) throw new Error("관리자 로그인이 필요합니다.");
   const entries = [];
   for (let index = 0; index < window.localStorage.length; index += 1) {
     const key = window.localStorage.key(index);

@@ -4,12 +4,18 @@ service cloud.firestore {
     match /portfolioEntries/{entry} {
       allow read: if true;
       allow write: if request.auth != null
-        && request.auth.token.email == 'arinawj@gmail.com';
+        && request.auth.token.email in [
+          'arinawj@gmail.com',
+          'rorirorirorari@gmail.com'
+        ];
 
       match /chunks/{chunk} {
         allow read: if true;
         allow write: if request.auth != null
-          && request.auth.token.email == 'arinawj@gmail.com';
+          && request.auth.token.email in [
+            'arinawj@gmail.com',
+            'rorirorirorari@gmail.com'
+          ];
       }
     }
   }

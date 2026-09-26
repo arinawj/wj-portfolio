@@ -244,10 +244,10 @@ body.detail-route {
 .preview-ghost-2,
 .preview-ghost-3 { display: none; }
 .screen-callout-line { position: absolute; inset: 0; z-index: 4; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-.screen-callout-line path { fill: none; stroke: var(--md-purple); stroke-width: 1.5px; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; opacity: 0; animation: calloutPathIn .46s cubic-bezier(.22,.8,.35,1) calc(var(--callout-delay) + 220ms) forwards; }
+.screen-callout-line path { fill: none; stroke: var(--md-purple); stroke-width: 1.5px; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; opacity: 0; animation: calloutPathIn .4s cubic-bezier(.22,.8,.35,1) calc(var(--callout-delay) + 100ms) forwards; }
 .screen-callout-line.is-dashed path { stroke-dasharray: .1 4; stroke-linecap: round; }
 .screen-callout-dot { position: absolute; z-index: 5; width: 9px; height: 9px; border-radius: 50%; background: var(--md-purple); opacity: 0; pointer-events: none; transform: translate(-50%,-50%) scale(.35); animation: calloutDotIn .22s ease-out var(--callout-delay) forwards; }
-.screen-callout { position: absolute; z-index: 5; display: flex; align-items: flex-start; gap: 7px; width: max-content; max-width: 250px; color: var(--md-purple); opacity: 0; transform: translate(-6px,2px); animation: calloutCopyIn .42s cubic-bezier(.2,.75,.3,1) calc(var(--callout-delay) + 700ms) forwards; }
+.screen-callout { position: absolute; z-index: 5; display: flex; align-items: flex-start; gap: 7px; width: max-content; max-width: 250px; color: var(--md-purple); opacity: 0; transform: translate(-6px,2px); animation: calloutCopyIn .4s cubic-bezier(.2,.75,.3,1) calc(var(--callout-delay) + 320ms) forwards; }
 .screen-callout b { display: grid; flex: 0 0 23px; place-items: center; width: 23px; height: 23px; border-radius: 50%; color: #fff; background: var(--md-purple); font-size: 9px; }
 .screen-callout span { display: grid; width: max-content; max-width: 204px; gap: 3px; padding: 5px 8px; border-radius: 6px; background: rgba(248,251,255,.9); }
 .screen-callout strong { font-size: 10px; }

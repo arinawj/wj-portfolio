@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, getFirestore, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBJ1IouZZHOGrC4Y-5CpYQ5O4H33SOLrck",
@@ -15,7 +15,8 @@ const ADMIN_EMAIL = "arinawj@gmail.com";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const contentRef = doc(db, "portfolio", "content");
+const entriesRef = collection(db, "portfolioEntries");
+const CHUNK_SIZE = 650000;
 const listeners = new Set();
 const originalSetItem = Storage.prototype.setItem;
 let currentUser = null;
@@ -31,14 +32,24 @@ function isPortfolioKey(key) {
 
 async function saveEntry(key, value) {
   if (currentUser?.email !== ADMIN_EMAIL || !isPortfolioKey(key)) return;
-  await setDoc(contentRef, { entries: { [key]: value }, updatedAt: new Date().toISOString() }, { merge: true });
+  const entryId = encodeURIComponent(key);
+  const entryRef = doc(entriesRef, entryId);
+  const chunksRef = collection(entryRef, "chunks");
+  const previousChunks = await getDocs(chunksRef);
+  await Promise.all(previousChunks.docs.map((chunk) => deleteDoc(chunk.ref)));
+  const chunks = String(value).match(new RegExp(`.{1,${CHUNK_SIZE}}`, "gs")) || [""];
+  await Promise.all(chunks.map((chunk, index) => setDoc(doc(chunksRef, String(index).padStart(4, "0")), { value: chunk })));
+  await setDoc(entryRef, { key, chunkCount: chunks.length, updatedAt: new Date().toISOString() });
 }
 
 export async function initializeCloudStorage() {
   try {
-    const snapshot = await getDoc(contentRef);
-    const entries = snapshot.data()?.entries || {};
-    Object.entries(entries).forEach(([key, value]) => originalSetItem.call(window.localStorage, key, value));
+    const entries = await getDocs(entriesRef);
+    await Promise.all(entries.docs.map(async (entry) => {
+      const chunks = await getDocs(collection(entry.ref, "chunks"));
+      const value = chunks.docs.sort((a, b) => a.id.localeCompare(b.id)).map((chunk) => chunk.data().value).join("");
+      if (entry.data().key && value) originalSetItem.call(window.localStorage, entry.data().key, value);
+    }));
   } catch (error) {
     console.warn("Firebase content load skipped:", error);
   }
@@ -78,11 +89,10 @@ export function signOutEditor() {
 
 export async function uploadCurrentLocalContent() {
   if (currentUser?.email !== ADMIN_EMAIL) throw new Error("관리자 로그인이 필요합니다.");
-  const entries = {};
+  const entries = [];
   for (let index = 0; index < window.localStorage.length; index += 1) {
     const key = window.localStorage.key(index);
-    if (isPortfolioKey(key)) entries[key] = window.localStorage.getItem(key);
+    if (isPortfolioKey(key)) entries.push([key, window.localStorage.getItem(key)]);
   }
-  await setDoc(contentRef, { entries, updatedAt: new Date().toISOString() }, { merge: true });
+  for (const [key, value] of entries) await saveEntry(key, value);
 }
-

@@ -2801,9 +2801,11 @@ body.has-image-preview {
 }
 /* Firebase-backed editor controls */
 .main-copy-editor,
-.detail-copy-editor { display: none !important; }
+.detail-copy-editor,
+.preview-edit-toggle { display: none !important; }
 .wj-admin-mode .main-copy-editor,
 .wj-admin-mode .detail-copy-editor { display: flex !important; }
+.wj-admin-mode .preview-edit-toggle { display: inline-flex !important; }
 .cloud-sync-control { position: fixed; left: 18px; bottom: 18px; z-index: 250; display: flex; align-items: center; gap: 7px; padding: 7px; border: 1px solid rgba(17,24,39,.14); border-radius: 6px; background: rgba(255,255,255,.94); box-shadow: 0 10px 28px rgba(15,23,42,.16); backdrop-filter: blur(12px); }
 .cloud-sync-control strong, .cloud-sync-control span { color: #344054; font-size: 11px; }
 .cloud-sync-control button { min-height: 32px; padding: 0 11px; border: 0; border-radius: 4px; color: #fff; background: #151b27; font: inherit; font-size: 11px; font-weight: 700; cursor: pointer; }

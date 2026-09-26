@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
+import { getAuth, getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signInWithRedirect, signOut } from "firebase/auth";
 import { collection, deleteDoc, doc, getDocs, getFirestore, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -44,6 +44,12 @@ async function saveEntry(key, value) {
 
 export async function initializeCloudStorage() {
   try {
+    await getRedirectResult(auth);
+  } catch (error) {
+    console.warn("Firebase redirect login skipped:", error);
+  }
+
+  try {
     const entries = await getDocs(entriesRef);
     await Promise.all(entries.docs.map(async (entry) => {
       const chunks = await getDocs(collection(entry.ref, "chunks"));
@@ -75,12 +81,7 @@ export function subscribeToCloudUser(listener) {
 }
 
 export async function signInAsEditor() {
-  const result = await signInWithPopup(auth, new GoogleAuthProvider());
-  if (result.user.email !== ADMIN_EMAIL) {
-    await signOut(auth);
-    throw new Error("등록된 관리자 계정으로 로그인해 주세요.");
-  }
-  return result.user;
+  await signInWithRedirect(auth, new GoogleAuthProvider());
 }
 
 export function signOutEditor() {

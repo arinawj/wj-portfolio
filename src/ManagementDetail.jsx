@@ -410,13 +410,13 @@ function ManagementDetail({ onRouteNavigate, onSectionNavigate }) {
                   const line = getCalloutLine(callout);
                   return (
                   <React.Fragment key={callout.number}>
-                    <svg className={`screen-callout-line${callout.isDashed ? " is-dashed" : ""}`} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style={{ "--callout-delay": `${index * 120 + 120}ms` }}>
+                    <svg className={`screen-callout-line${callout.isDashed ? " is-dashed" : ""}`} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style={{ "--callout-delay": `${index * 900 + 120}ms` }}>
                       <path d={line.path} />
                     </svg>
                     <span
                       className="screen-callout-dot"
                       aria-hidden="true"
-                      style={{ left: `${callout.targetX}%`, top: `${callout.targetY}%`, "--callout-delay": `${index * 120 + 120}ms` }}
+                      style={{ left: `${callout.targetX}%`, top: `${callout.targetY}%`, "--callout-delay": `${index * 900 + 120}ms` }}
                     />
                     {isEditMode ? (
                       <>
@@ -442,7 +442,7 @@ function ManagementDetail({ onRouteNavigate, onSectionNavigate }) {
                     ) : null}
                     <div
                       className={`screen-callout${isEditMode && index === selectedCallout ? " is-selected" : ""}`}
-                      style={{ left: `${callout.x}%`, top: `${callout.y}%`, "--callout-delay": `${index * 120 + 220}ms` }}
+                      style={{ left: `${callout.x}%`, top: `${callout.y}%`, "--callout-delay": `${index * 900 + 120}ms` }}
                       onClick={(event) => { event.stopPropagation(); setSelectedCallout(index); }}
                       onPointerDown={(event) => handleCalloutDrag(event, index, "label")}
                     >

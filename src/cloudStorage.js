@@ -43,11 +43,9 @@ async function saveEntry(key, value) {
 }
 
 export async function initializeCloudStorage() {
-  try {
-    await getRedirectResult(auth);
-  } catch (error) {
+  getRedirectResult(auth).catch((error) => {
     console.warn("Firebase redirect login skipped:", error);
-  }
+  });
 
   try {
     const entries = await getDocs(entriesRef);

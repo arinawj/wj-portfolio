@@ -10,6 +10,7 @@ import roleBackground from "./assets/management/section-05-my-role.png";
 import nextProjectBackground from "./assets/management/section-06-next-project.png";
 import darkPurpleCard from "./assets/management/dark-purple-card.png";
 import DetailTextEditor from "./DetailTextEditor.jsx";
+import { LanguageSwitch } from "./LanguageContext.jsx";
 import "./management-detail.css";
 
 const PREVIEW_CALLOUT_STORAGE_KEY = "wj-management-preview-callouts-v2";
@@ -591,7 +592,7 @@ function DetailHeader({ onRouteNavigate, onSectionNavigate }) {
           <a className="is-active" href="/#axtion" onClick={(event) => onSectionNavigate(event, "#axtion")}>AXTION</a>
           <a href="/#contact" onClick={(event) => onSectionNavigate(event, "#contact")}>CONTACT</a>
         </nav>
-        <div className="management-language">KR <i /> EN <span>↗</span></div>
+        <LanguageSwitch detail />
       </div>
     </header>
   );

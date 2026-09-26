@@ -166,6 +166,23 @@ button:focus-visible {
   font-weight: 500;
 }
 
+.language-switch button,
+.management-language button {
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  opacity: 0.48;
+}
+
+.language-switch button[aria-pressed="true"],
+.management-language button[aria-pressed="true"] {
+  opacity: 1;
+  font-weight: 700;
+}
+
 .language-switch i {
   display: block;
   width: 30px;

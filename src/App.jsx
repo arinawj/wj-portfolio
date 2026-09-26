@@ -14,6 +14,7 @@ import {
 import heroRibbonImage from "./assets/main/hero-ribbon-approved.png";
 import ManagementDetail from "./ManagementDetail.jsx";
 import CSDetail from "./CSDetail.jsx";
+import { LanguageSwitch, translatePortfolioText, useLanguage } from "./LanguageContext.jsx";
 
 const sectionIds = ["home", "operate", "manage", "axtion", "contact"];
 
@@ -139,6 +140,7 @@ function App() {
 }
 
 function MainPage({ onRouteNavigate, onSectionNavigate }) {
+  const { language } = useLanguage();
   const [activeSection, setActiveSection] = useState("home");
   const [isCopyEditMode, setIsCopyEditMode] = useState(() => new URLSearchParams(window.location.search).get("edit") === "main");
 
@@ -160,7 +162,7 @@ function MainPage({ onRouteNavigate, onSectionNavigate }) {
   }, []);
 
   useEffect(() => {
-    const storageKey = "wj-main-copy-v1";
+    const storageKey = language === "en" ? "wj-main-copy-en-v1" : "wj-main-copy-v1";
     const categoryRepairKey = "wj-operate-category-repair-v1";
     const shouldRepairOperateCategories = !window.localStorage.getItem(categoryRepairKey);
     const savedCopy = JSON.parse(window.localStorage.getItem(storageKey) || "{}");
@@ -221,7 +223,8 @@ function MainPage({ onRouteNavigate, onSectionNavigate }) {
       const legacyKey = `${section}:${element.tagName.toLowerCase()}:${index}`;
       const key = getStableCopyKey(element);
       const previousKey = getPreviousCopyKey(element);
-      const defaultText = element.innerText;
+      const defaultText = element.dataset.koreanCopy || element.innerText;
+      element.dataset.koreanCopy = defaultText;
       element.dataset.mainCopyKey = key;
       element.classList.add("main-copy-content");
       if (!Object.prototype.hasOwnProperty.call(savedCopy, key)) {
@@ -229,9 +232,10 @@ function MainPage({ onRouteNavigate, onSectionNavigate }) {
         const savedValue = isNestedHeaderCopy
           ? defaultText
           : (savedCopy[previousKey] ?? savedCopy[legacyKey]);
+        const languageDefault = language === "en" ? translatePortfolioText(defaultText) : defaultText;
         savedCopy[key] = savedValue === "" && element.matches("#operate .section-copy")
-          ? defaultText
-          : (savedValue ?? defaultText);
+          ? languageDefault
+          : (savedValue ?? languageDefault);
         window.localStorage.setItem(storageKey, JSON.stringify(savedCopy));
       }
       element.textContent = savedCopy[key];
@@ -275,7 +279,7 @@ function MainPage({ onRouteNavigate, onSectionNavigate }) {
     }
 
     return () => cleanups.forEach((cleanup) => cleanup());
-  }, [isCopyEditMode]);
+  }, [isCopyEditMode, language]);
 
   const toggleCopyEditMode = () => {
     const nextMode = !isCopyEditMode;
@@ -343,15 +347,7 @@ function Header({ activeSection, onRouteNavigate, onSectionNavigate }) {
           })}
         </nav>
 
-        <div className="language-switch" aria-label="Language switch">
-          <i aria-hidden="true" />
-          <button type="button" aria-pressed="true">
-            KR
-          </button>
-          <button type="button" aria-pressed="false">
-            EN
-          </button>
-        </div>
+        <LanguageSwitch />
       </div>
     </header>
   );

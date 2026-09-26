@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { translatePortfolioText, useLanguage } from "./LanguageContext.jsx";
 
 const editableSelector = [
   ".management-detail main h1 b",
@@ -27,6 +28,8 @@ function getCopyKey(element) {
 }
 
 export default function DetailTextEditor({ storageKey }) {
+  const { language } = useLanguage();
+  const languageStorageKey = language === "en" ? `${storageKey}-en` : storageKey;
   const [isEditing, setIsEditing] = useState(
     () => new URLSearchParams(window.location.search).get("copy") === "1",
   );
@@ -34,7 +37,7 @@ export default function DetailTextEditor({ storageKey }) {
   useEffect(() => {
     let savedCopy = {};
     try {
-      savedCopy = JSON.parse(window.localStorage.getItem(storageKey) || "{}");
+      savedCopy = JSON.parse(window.localStorage.getItem(languageStorageKey) || "{}");
     } catch {
       savedCopy = {};
     }
@@ -49,7 +52,11 @@ export default function DetailTextEditor({ storageKey }) {
     const cleanups = elements.map((element) => {
       const key = getCopyKey(element);
       element.classList.add("detail-copy-content");
+      const koreanText = element.dataset.koreanCopy || element.innerText;
+      element.dataset.koreanCopy = koreanText;
       if (Object.prototype.hasOwnProperty.call(savedCopy, key)) element.textContent = savedCopy[key];
+      else if (language === "en") element.textContent = translatePortfolioText(koreanText);
+      else element.textContent = koreanText;
       if (!isEditing) return () => {};
 
       element.contentEditable = "true";
@@ -57,7 +64,7 @@ export default function DetailTextEditor({ storageKey }) {
       element.classList.add("detail-copy-editable");
       const save = () => {
         savedCopy[key] = element.innerText.replace(/\n{3,}/g, "\n\n").trim();
-        window.localStorage.setItem(storageKey, JSON.stringify(savedCopy));
+        window.localStorage.setItem(languageStorageKey, JSON.stringify(savedCopy));
       };
       const protectLink = (event) => {
         if (element.closest("a")) event.preventDefault();
@@ -75,7 +82,7 @@ export default function DetailTextEditor({ storageKey }) {
     });
 
     return () => cleanups.forEach((cleanup) => cleanup());
-  }, [isEditing, storageKey]);
+  }, [isEditing, language, languageStorageKey]);
 
   const toggleEditing = () => {
     const next = !isEditing;

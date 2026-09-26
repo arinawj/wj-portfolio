@@ -9,6 +9,7 @@ import outcomesBackground from "./assets/cs/section-04-outcomes.png";
 import roleBackground from "./assets/cs/section-05-role.png";
 import nextBackground from "./assets/cs/section-06-next.png";
 import DetailTextEditor from "./DetailTextEditor.jsx";
+import { LanguageSwitch } from "./LanguageContext.jsx";
 import "./management-detail.css";
 import "./cs-detail.css";
 
@@ -585,7 +586,7 @@ function DetailHeader({ onRouteNavigate, onSectionNavigate }) {
           <a className="is-active" href="/#axtion" onClick={(event) => onSectionNavigate(event, "#axtion")}>AXTION</a>
           <a href="/#contact" onClick={(event) => onSectionNavigate(event, "#contact")}>CONTACT</a>
         </nav>
-        <div className="management-language">KR <i /> EN <span>↗</span></div>
+        <LanguageSwitch detail />
       </div>
     </header>
   );

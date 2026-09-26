@@ -103,7 +103,6 @@ body.detail-route {
 }
 
 .management-language i { width: 1px; height: 12px; background: rgba(255,255,255,.35); }
-.management-language span { display: grid; place-items: center; width: 25px; height: 25px; border: 1px solid rgba(255,255,255,.7); border-radius: 50%; }
 
 .management-hero {
   position: relative;

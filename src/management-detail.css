@@ -376,6 +376,11 @@ body.preview-lightbox-open { overflow: hidden; }
 }
 
 @media (max-width: 720px) {
+  body.detail-route, .management-detail {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
   .detail-container { width: calc(100% - 28px); }
   .management-header { position: absolute; height: 58px; }
   .management-header .detail-container { grid-template-columns: 1fr auto; }

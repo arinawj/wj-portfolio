@@ -3004,6 +3004,22 @@ html[lang="en"] .project-group.current li span {
   .case-card h4 { margin: 24px 0 18px; font-size: 18px; }
   .case-body, .case-learned p { font-size: 13px; line-height: 1.65; }
 
+  .operate-lightbox {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 72px 20px 64px;
+  }
+  .operate-lightbox > img {
+    justify-self: center;
+    width: auto;
+    max-width: calc(100vw - 40px);
+    max-height: calc(100dvh - 150px);
+  }
+  .operate-lightbox-close { top: 18px; right: 18px; }
+  .operate-lightbox-nav { width: 42px; height: 42px; }
+  .operate-lightbox-nav.is-prev { left: 12px; }
+  .operate-lightbox-nav.is-next { right: 12px; }
+  .operate-lightbox-count { bottom: 22px; }
+
   .manage-content { padding: 0; border: 0; }
   .manage-upper { display: block; padding-bottom: 22px; }
   .what-i-did { display: block; }
@@ -3041,6 +3057,20 @@ html[lang="en"] .project-group.current li span {
   }
   .project-group h4 { font-size: 13px; }
   .project-group li, .project-group header p { font-size: 12px; line-height: 1.55; }
+  .project-group:not(.current) li {
+    display: grid;
+    grid-template-columns: 7px minmax(0, 1fr);
+    gap: 8px;
+  }
+  .project-group:not(.current) li::before { grid-column: 1; }
+  .project-group:not(.current) li strong,
+  .project-group:not(.current) li span {
+    grid-column: 2;
+    min-width: 0;
+    white-space: normal;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
   .project-group.current li { grid-template-columns: 18px 94px minmax(0, 1fr); }
 
   .axtion-layout { padding-top: 42px; }

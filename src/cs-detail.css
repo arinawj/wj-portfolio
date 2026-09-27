@@ -163,25 +163,25 @@
 @media (max-width: 720px) {
   .cs-detail .management-hero,
   .cs-detail .management-hero-grid {
-    min-height: 560px;
+    min-height: 465px;
   }
 
   .cs-detail .management-product-visual img {
-    width: 100%;
-    margin: 0;
+    width: 900px;
+    margin: 0 -15px -26px auto;
     transform: none;
   }
 
   .cs-detail .preview-layout {
-    min-height: 560px;
-    height: auto;
+    min-height: 499px;
+    height: 499px;
   }
 
   .cs-detail .preview-tabs {
-    margin-top: 18px;
+    margin-top: 12px;
   }
 
   .cs-detail .preview-tabs button {
-    min-height: 42px;
+    min-height: 30px;
   }
 }

@@ -1,5 +1,15 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signInWithRedirect, signOut } from "firebase/auth";
+import {
+  browserLocalPersistence,
+  getAuth,
+  getRedirectResult,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  setPersistence,
+  signInWithPopup,
+  signInWithRedirect,
+  signOut,
+} from "firebase/auth";
 import { collection, deleteDoc, doc, getDocs, getFirestore, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -24,6 +34,11 @@ const listeners = new Set();
 const originalSetItem = Storage.prototype.setItem;
 let currentUser = null;
 let patched = false;
+let authSubscribed = false;
+
+function isAdminUser(user) {
+  return ADMIN_EMAILS.has(user?.email?.trim().toLowerCase());
+}
 
 function notify() {
   listeners.forEach((listener) => listener(currentUser));
@@ -34,7 +49,7 @@ function isPortfolioKey(key) {
 }
 
 async function saveEntry(key, value) {
-  if (!ADMIN_EMAILS.has(currentUser?.email) || !isPortfolioKey(key)) return;
+  if (!isAdminUser(currentUser) || !isPortfolioKey(key)) return;
   const entryId = encodeURIComponent(key);
   const entryRef = doc(entriesRef, entryId);
   const chunksRef = collection(entryRef, "chunks");
@@ -46,7 +61,17 @@ async function saveEntry(key, value) {
 }
 
 export async function initializeCloudStorage() {
-  getRedirectResult(auth).catch((error) => {
+  await setPersistence(auth, browserLocalPersistence);
+
+  if (!authSubscribed) {
+    onAuthStateChanged(auth, (user) => {
+      currentUser = isAdminUser(user) ? user : null;
+      notify();
+    });
+    authSubscribed = true;
+  }
+
+  await getRedirectResult(auth).catch((error) => {
     console.warn("Firebase redirect login skipped:", error);
   });
 
@@ -69,10 +94,6 @@ export async function initializeCloudStorage() {
     patched = true;
   }
 
-  onAuthStateChanged(auth, (user) => {
-    currentUser = ADMIN_EMAILS.has(user?.email) ? user : null;
-    notify();
-  });
 }
 
 export function subscribeToCloudUser(listener) {
@@ -82,7 +103,23 @@ export function subscribeToCloudUser(listener) {
 }
 
 export async function signInAsEditor() {
-  await signInWithRedirect(auth, new GoogleAuthProvider());
+  await setPersistence(auth, browserLocalPersistence);
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: "select_account" });
+
+  try {
+    const result = await signInWithPopup(auth, provider);
+    if (!isAdminUser(result.user)) {
+      await signOut(auth);
+      throw new Error("등록된 관리자 계정으로 로그인해 주세요.");
+    }
+  } catch (error) {
+    if (error?.code === "auth/popup-blocked" || error?.code === "auth/operation-not-supported-in-this-environment") {
+      await signInWithRedirect(auth, provider);
+      return;
+    }
+    throw error;
+  }
 }
 
 export function signOutEditor() {
@@ -90,7 +127,7 @@ export function signOutEditor() {
 }
 
 export async function uploadCurrentLocalContent() {
-  if (!ADMIN_EMAILS.has(currentUser?.email)) throw new Error("관리자 로그인이 필요합니다.");
+  if (!isAdminUser(currentUser)) throw new Error("관리자 로그인이 필요합니다.");
   const entries = [];
   for (let index = 0; index < window.localStorage.length; index += 1) {
     const key = window.localStorage.key(index);

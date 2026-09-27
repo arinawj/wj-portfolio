@@ -585,6 +585,7 @@ function OperateSection({ isEditMode }) {
         />
 
         <div className="operate-cases" aria-label="Operate cases">
+          <ScrollCue />
           <div className="operate-gallery" aria-label="Operate image gallery" tabIndex="0">
             {galleryImages.map((item, position) => (
               <figure className={isEditMode ? "is-image-editable" : ""} key={`${item.type}-${item.sourceIndex}`}>
@@ -629,6 +630,7 @@ function OperateSection({ isEditMode }) {
             ) : null}
           </div>
 
+          <ScrollCue />
           <div className="operate-topics">
             {operateCases.map((item) => (
               <article className="case-card" key={item.label}>
@@ -763,6 +765,7 @@ function AxtionSection({ onRouteNavigate }) {
 
         <div className="axtion-main">
           <ProcessFlow />
+          <ScrollCue light />
           <div className="platform-grid">
             {platformProjects.map((project) => (
               <PlatformProject
@@ -815,6 +818,7 @@ function ProjectFlow() {
   return (
     <div className="project-flow">
       <h3>PROJECT FLOW</h3>
+      <ScrollCue />
       <div className="flow-panels">
         {projectFlow.map((item, index) => (
           <React.Fragment key={item.title}>
@@ -863,6 +867,7 @@ function ProjectsAndOperations() {
   return (
     <div className="projects-operations" aria-label="Projects and operations">
       <h3>PROJECTS &amp; OPERATIONS</h3>
+      <ScrollCue />
       <div className="project-group-grid">
         {projectGroups.map((group) => (
           <article className="project-group" key={group.title}>
@@ -907,6 +912,7 @@ function ProcessFlow() {
   return (
     <div className="axtion-process">
       <h3>HOW I TURN A PROBLEM INTO A SYSTEM</h3>
+      <ScrollCue light />
       <div className="process-items">
         {axtionProcess.map((step, index) => (
           <React.Fragment key={step.title}>
@@ -955,6 +961,15 @@ function PlatformProject({ project, onRouteNavigate }) {
         <img src={project.image} alt={project.alt} />
       </div>
     </article>
+  );
+}
+
+function ScrollCue({ light = false }) {
+  return (
+    <span className={`mobile-scroll-cue${light ? " is-light" : ""}`} aria-hidden="true">
+      <span>SCROLL</span>
+      <b>≫</b>
+    </span>
   );
 }
 

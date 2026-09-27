@@ -237,11 +237,7 @@ export function translatePortfolioText(value) {
 }
 
 export function LanguageProvider({ children }) {
-  const [language, setLanguage] = useState(() => {
-    const requestedLanguage = new URLSearchParams(window.location.search).get("lang");
-    if (requestedLanguage === "en" || requestedLanguage === "ko") return requestedLanguage;
-    return window.localStorage.getItem(LANGUAGE_KEY) === "en" ? "en" : "ko";
-  });
+  const [language, setLanguage] = useState("ko");
 
   useEffect(() => {
     window.localStorage.setItem(LANGUAGE_KEY, language);
@@ -259,15 +255,7 @@ export function useLanguage() {
 }
 
 export function LanguageSwitch({ detail = false }) {
-  const { language, setLanguage } = useLanguage();
-  return (
-    <div className={detail ? "management-language" : "language-switch"} aria-label="Language switch">
-      {!detail ? <i aria-hidden="true" /> : null}
-      <button type="button" aria-pressed={language === "ko"} onClick={() => setLanguage("ko")}>KR</button>
-      <i aria-hidden="true" />
-      <button type="button" aria-pressed={language === "en"} onClick={() => setLanguage("en")}>EN</button>
-    </div>
-  );
+  return null;
 }
 
 export function PageTranslator() {

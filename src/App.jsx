@@ -15,6 +15,7 @@ import heroRibbonImage from "./assets/main/hero-ribbon-approved.png";
 import ManagementDetail from "./ManagementDetail.jsx";
 import CSDetail from "./CSDetail.jsx";
 import { LanguageSwitch, translatePortfolioText, useLanguage } from "./LanguageContext.jsx";
+import useEditorUser from "./useEditorUser.js";
 
 const sectionIds = ["home", "operate", "manage", "axtion", "contact"];
 
@@ -141,8 +142,10 @@ function App() {
 
 function MainPage({ onRouteNavigate, onSectionNavigate }) {
   const { language } = useLanguage();
+  const editorUser = useEditorUser();
   const [activeSection, setActiveSection] = useState("home");
   const [isCopyEditMode, setIsCopyEditMode] = useState(() => new URLSearchParams(window.location.search).get("edit") === "main");
+  const canEditCopy = Boolean(editorUser && isCopyEditMode);
 
   useEffect(() => {
     const updateActiveSection = () => {
@@ -253,7 +256,7 @@ function MainPage({ onRouteNavigate, onSectionNavigate }) {
           window.localStorage.setItem(storageKey, JSON.stringify(savedCopy));
         }
       }
-      if (!isCopyEditMode) return () => element.removeAttribute("data-main-copy-key");
+      if (!canEditCopy) return () => element.removeAttribute("data-main-copy-key");
 
       element.contentEditable = "true";
       element.spellcheck = false;
@@ -284,9 +287,10 @@ function MainPage({ onRouteNavigate, onSectionNavigate }) {
     }
 
     return () => cleanups.forEach((cleanup) => cleanup());
-  }, [isCopyEditMode, language]);
+  }, [canEditCopy, language]);
 
   const toggleCopyEditMode = () => {
+    if (!editorUser) return;
     const nextMode = !isCopyEditMode;
     const url = new URL(window.location.href);
     if (nextMode) url.searchParams.set("edit", "main");
@@ -309,10 +313,12 @@ function MainPage({ onRouteNavigate, onSectionNavigate }) {
         <AxtionSection onRouteNavigate={onRouteNavigate} />
       </main>
       <Footer onSectionNavigate={onSectionNavigate} />
-      <div className={`main-copy-editor${isCopyEditMode ? " is-active" : ""}`}>
-        {isCopyEditMode ? <strong>문구 편집 중</strong> : null}
-        <button type="button" onClick={toggleCopyEditMode}>{isCopyEditMode ? "편집 종료" : "문구 편집"}</button>
-      </div>
+      {editorUser ? (
+        <div className={`main-copy-editor${canEditCopy ? " is-active" : ""}`}>
+          {canEditCopy ? <strong>문구 편집 중</strong> : null}
+          <button type="button" onClick={toggleCopyEditMode}>{canEditCopy ? "편집 종료" : "문구 편집"}</button>
+        </div>
+      ) : null}
     </div>
   );
 }

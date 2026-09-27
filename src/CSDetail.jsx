@@ -10,6 +10,7 @@ import roleBackground from "./assets/cs/section-05-role.png";
 import nextBackground from "./assets/cs/section-06-next.png";
 import DetailTextEditor from "./DetailTextEditor.jsx";
 import { LanguageSwitch } from "./LanguageContext.jsx";
+import useEditorUser from "./useEditorUser.js";
 import "./management-detail.css";
 import "./cs-detail.css";
 
@@ -141,6 +142,7 @@ const roles = [
 ];
 
 function CSDetail({ onRouteNavigate, onSectionNavigate }) {
+  const editorUser = useEditorUser();
   const [activeGroup, setActiveGroup] = useState(0);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -166,7 +168,7 @@ function CSDetail({ onRouteNavigate, onSectionNavigate }) {
   const [copyStatus, setCopyStatus] = useState("");
   const dragStart = useRef(null);
   const previewScreenRef = useRef(null);
-  const isEditMode = new URLSearchParams(window.location.search).get("edit") === "preview";
+  const isEditMode = Boolean(editorUser && new URLSearchParams(window.location.search).get("edit") === "preview");
 
   useEffect(() => {
     document.body.classList.add("detail-route");
@@ -370,7 +372,7 @@ function CSDetail({ onRouteNavigate, onSectionNavigate }) {
 
             <div className="preview-stage" tabIndex="0" onKeyDown={handleKeyDown} onPointerDown={handlePointerDown} onPointerUp={handlePointerUp} aria-label="플랫폼 화면 미리보기. 좌우 방향키 또는 드래그로 이동할 수 있습니다.">
               <p className="preview-explore">EXPLORE<br />THE PLATFORM</p>
-              {!isEditMode ? <a className="preview-edit-toggle" href={`${window.location.pathname}?edit=preview#screen-preview`}>설명 편집</a> : null}
+              {editorUser && !isEditMode ? <a className="preview-edit-toggle" href={`${window.location.pathname}?edit=preview#screen-preview`}>설명 편집</a> : null}
               {group.slides.length > 1 ? [-1, 1].map((offset) => {
                 const index = (activeSlide + offset + group.slides.length) % group.slides.length;
                 return (

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { translatePortfolioText, useLanguage } from "./LanguageContext.jsx";
+import useEditorUser from "./useEditorUser.js";
 
 const editableSelector = [
   ".management-detail main h1 b",
@@ -29,10 +30,12 @@ function getCopyKey(element) {
 
 export default function DetailTextEditor({ storageKey }) {
   const { language } = useLanguage();
+  const editorUser = useEditorUser();
   const languageStorageKey = language === "en" ? `${storageKey}-en-v4` : storageKey;
   const [isEditing, setIsEditing] = useState(
     () => new URLSearchParams(window.location.search).get("copy") === "1",
   );
+  const canEdit = Boolean(editorUser && isEditing);
 
   useEffect(() => {
     let savedCopy = {};
@@ -64,7 +67,7 @@ export default function DetailTextEditor({ storageKey }) {
       else if (language === "en") element.textContent = translatePortfolioText(koreanText);
       else element.textContent = koreanText;
       if (language === "ko") element.dataset.koreanCopy = element.innerText;
-      if (!isEditing) return () => {};
+      if (!canEdit) return () => {};
 
       element.contentEditable = "true";
       element.spellcheck = false;
@@ -89,9 +92,10 @@ export default function DetailTextEditor({ storageKey }) {
     });
 
     return () => cleanups.forEach((cleanup) => cleanup());
-  }, [isEditing, language, languageStorageKey]);
+  }, [canEdit, language, languageStorageKey, storageKey]);
 
   const toggleEditing = () => {
+    if (!editorUser) return;
     const next = !isEditing;
     const url = new URL(window.location.href);
     if (next) url.searchParams.set("copy", "1");
@@ -100,10 +104,12 @@ export default function DetailTextEditor({ storageKey }) {
     setIsEditing(next);
   };
 
+  if (!editorUser) return null;
+
   return (
-    <div className={`detail-copy-editor${isEditing ? " is-active" : ""}`}>
-      {isEditing ? <strong>본문 편집 중</strong> : null}
-      <button type="button" onClick={toggleEditing}>{isEditing ? "편집 종료" : "문구 편집"}</button>
+    <div className={`detail-copy-editor${canEdit ? " is-active" : ""}`}>
+      {canEdit ? <strong>본문 편집 중</strong> : null}
+      <button type="button" onClick={toggleEditing}>{canEdit ? "편집 종료" : "문구 편집"}</button>
     </div>
   );
 }

@@ -159,3 +159,29 @@
   border-color: #12bba7;
   background: rgba(10, 158, 141, 0.24);
 }
+
+@media (max-width: 720px) {
+  .cs-detail .management-hero,
+  .cs-detail .management-hero-grid {
+    min-height: 560px;
+  }
+
+  .cs-detail .management-product-visual img {
+    width: 100%;
+    margin: 0;
+    transform: none;
+  }
+
+  .cs-detail .preview-layout {
+    min-height: 560px;
+    height: auto;
+  }
+
+  .cs-detail .preview-tabs {
+    margin-top: 18px;
+  }
+
+  .cs-detail .preview-tabs button {
+    min-height: 42px;
+  }
+}

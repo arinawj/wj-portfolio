@@ -163,7 +163,7 @@ function MainPage({ onRouteNavigate, onSectionNavigate }) {
 
   useEffect(() => {
     const koreanStorageKey = "wj-main-copy-v1";
-    const storageKey = language === "en" ? "wj-main-copy-en-v2" : koreanStorageKey;
+    const storageKey = language === "en" ? "wj-main-copy-en-v4" : koreanStorageKey;
     const categoryRepairKey = "wj-operate-category-repair-v1";
     const shouldRepairOperateCategories = language === "ko" && !window.localStorage.getItem(categoryRepairKey);
     const savedCopy = JSON.parse(window.localStorage.getItem(storageKey) || "{}");

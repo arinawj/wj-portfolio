@@ -2830,3 +2830,37 @@ body.has-image-preview {
 .cloud-sync-control button { min-height: 32px; padding: 0 11px; border: 0; border-radius: 4px; color: #fff; background: #151b27; font: inherit; font-size: 11px; font-weight: 700; cursor: pointer; }
 .cloud-sync-control .cloud-sync-quiet { color: #475467; background: #eef1f5; }
 @media (max-width: 720px) { .cloud-sync-control { left: 10px; right: 10px; bottom: 10px; flex-wrap: wrap; } }
+
+/* English copy needs more room than the Korean labels in the operations matrix. */
+html[lang="en"] .project-group.current li {
+  grid-template-columns: 14px minmax(138px, 0.85fr) minmax(0, 1.35fr);
+  align-items: start;
+  gap: 8px;
+}
+
+html[lang="en"] .project-group.current li strong,
+html[lang="en"] .project-group.current li span,
+html[lang="en"] .project-group:not(.current) li strong {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+html[lang="en"] .project-group.current li strong {
+  line-height: 1.25;
+}
+
+html[lang="en"] .project-group.current li span {
+  line-height: 1.4;
+}
+
+@media (max-width: 720px) {
+  html[lang="en"] .project-group.current li {
+    grid-template-columns: 14px minmax(0, 1fr);
+  }
+
+  html[lang="en"] .project-group.current li span {
+    grid-column: 2;
+  }
+}

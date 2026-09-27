@@ -29,7 +29,7 @@ function getCopyKey(element) {
 
 export default function DetailTextEditor({ storageKey }) {
   const { language } = useLanguage();
-  const languageStorageKey = language === "en" ? `${storageKey}-en-v2` : storageKey;
+  const languageStorageKey = language === "en" ? `${storageKey}-en-v4` : storageKey;
   const [isEditing, setIsEditing] = useState(
     () => new URLSearchParams(window.location.search).get("copy") === "1",
   );
